@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+            
+ 
+  </head>
+<body>
+
+<p>Click the button to get your coordinates.</p>
+
+<button onclick="getLocation()">Try It</button>
+
+<p id="demo"></p>
+
+<script>
+var x = document.getElementById("demo");
+
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+    
+  } else { 
+    x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+};
+
+function showPosition(position) {
+  x.innerHTML = "Latitude: " + position.coords.latitude + 
+  "<br>Longitude: " + position.coords.longitude;
+  let protectedUrl = 'https://safe-city-backend-test.herokuapp.com/curPosition/heartbeat' ;
+
+let response = fetch(protectedUrl , {
+  method: 'POST',
+  // mode: 'no-cors',
+  body: JSON.stringify({
+    long: 19.050831,
+    lat: 73.071892
+  }),
+  headers: {
+    'Content-Type': 'application/json',
+'Authorization': "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFiY0B4eXouY29tIiwidXNlcklkIjoiNWUxZmQwNGEyNmZmYWIxMTc4ZTk1ZjBjIiwiaWF0IjoxNTc5MTc2NDM5LCJleHAiOjE1NzkxODAwMzl9.Hz77kTb6s3eM76t9Qn8-Rsp_jvw4jz55T_NJaJroOeA"
+  }
+}).then(function(res){
+  res.json().then(function(resData){
+    console.log(resData);
+  });
+	console.log("res: ", res);
+}).catch(function(err){
+  console.log("err: ", err);
+});
+};
+
+
+</script>
+
+</body>
+</html>
